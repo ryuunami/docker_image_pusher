@@ -1,4 +1,4 @@
-xuxueli/xxl-job-admin:2.3.1
+cloudron/stirlingpdf.frooodle.cloudronapp:20240617-075957-692775dda
 #支持私库 
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
