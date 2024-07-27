@@ -1,4 +1,4 @@
-influxdb:2.7.7
+nacos/nacos-server:v2.4.0.1
 #支持私库
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
