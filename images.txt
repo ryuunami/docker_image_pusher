@@ -1,6 +1,7 @@
-flink:1.19.1-scala_2.12-java11
+bitnami/minio:2024.8.3
 #支持私库
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
 #支持指定架构
+--platform=linux/arm64
 #--platform=linux/arm64 xiaoyaliu/alist
