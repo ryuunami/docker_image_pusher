@@ -1,4 +1,4 @@
---platform=linux/arm64 bitnami/minio:2024.6.26
+--platform=linux/amd64,linux/arm64 openjdk:8u302-jdk
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
