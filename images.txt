@@ -1,6 +1,6 @@
 # nodered/node-red:4.0.2-22
 # --platform=linux/arm64 openjdk:8u302-jdk
---platform=linux/arm64 flink:1.16.0-scala_2.12-java8
+--platform=linux/arm64/v8 flink:1.16.0-scala_2.12-java8
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
