@@ -1,7 +1,7 @@
 # nodered/node-red:4.0.2-22
 # --platform=linux/arm64 openjdk:8u302-jdk
 # --platform=linux/arm64 openresty/openresty:1.25.3.1-4-jammy
-polinux/stress
+polinux/stress:1.0.4
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
