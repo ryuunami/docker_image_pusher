@@ -1,6 +1,17 @@
 # nodered/node-red:4.0.2-22
 # --platform=linux/arm64 openjdk:8u302-jdk
---platform=linux/arm64 redis:7.2.5
+confluentinc/cp-kafka:7.4.0
+acryldata/datahub-actions:head
+acryldata/datahub-frontend-react:head
+acryldata/datahub-gms:head
+acryldata/datahub-upgrade:head
+elasticsearch:7.10.1
+acryldata/datahub-elasticsearch-setup:head
+acryldata/datahub-kafka-setup:head
+mysql:8.2
+acryldata/datahub-mysql-setup:head
+confluentinc/cp-schema-registry:7.4.0
+confluentinc/cp-zookeeper:7.4.0
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
