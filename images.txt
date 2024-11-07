@@ -7,6 +7,6 @@ docker.io/bitnami/zookeeper:3.9.1-debian-12-r13
 #支持私库 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
-#支持指定架构
+#支持指定架构1
 #--platform=linux/arm64 tools/arm
 #--platform=linux/arm64
