@@ -1,8 +1,6 @@
 # nodered/node-red:4.0.2-22
 # --platform=linux/arm64 openjdk:8u302-jdk
-docker.io/acryldata/datahub-gms:v0.14.1
-docker.io/acryldata/datahub-frontend-react:v0.14.1
-docker.io/acryldata/datahub-actions:v0.14.1
+docker.io/acryldata/datahub-actions:v0.1.1
 docker.io/acryldata/datahub-mae-consumer:v0.14.1
 docker.io/acryldata/datahub-mce-consumer:v0.14.1
 docker.io/acryldata/datahub-ingestion:v0.14.1
