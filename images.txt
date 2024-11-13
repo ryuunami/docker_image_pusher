@@ -1,14 +1,6 @@
 # nodered/node-red:4.0.2-22
 # --platform=linux/arm64 openjdk:8u302-jdk
-docker.io/acryldata/datahub-actions:v0.1.1
-docker.io/acryldata/datahub-mae-consumer:v0.14.1
-docker.io/acryldata/datahub-mce-consumer:v0.14.1
-docker.io/acryldata/datahub-ingestion:v0.14.1
-docker.io/acryldata/datahub-elasticsearch-setup:v0.14.1
-docker.io/acryldata/datahub-kafka-setup:v0.14.1
-docker.io/acryldata/datahub-mysql-setup:v0.14.1
-docker.io/acryldata/datahub-postgres-setup:v0.14.1
-docker.io/acryldata/datahub-upgrade:v0.14.1
+mysql:8.4.3
 #支持私库 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
