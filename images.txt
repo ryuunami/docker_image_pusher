@@ -1,6 +1,6 @@
 # nodered/node-red:4.0.2-22
 # --platform=linux/arm64 openjdk:8u302-jdk1
-bitnami/mongodb:8.0.3-debian-12-r1
+tomcat:9.0.90-jdk8
 #支持私库 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
