@@ -1,6 +1,6 @@
 # nodered/node-red:4.0.2-22
 # --platform=linux/arm64 openjdk:8u302-jdk11
-minio/minio:RELEASE.2023-12-20T01-00-02Z
+6053537/portainer-ce:2.24.1
 #支持私库 --platform=linux/arm64 
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
