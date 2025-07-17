@@ -95,7 +95,7 @@ jobs:
             image=$(echo "$line" | awk '{print $NF}')
             # 将@sha256:等字符删除
             image="${image%%@*}"
-            
+
             # 获取 镜像名:版本号  例如nginx:1.25.3
             image_name_tag=$(echo "$image" | awk -F'/' '{print $NF}')
             # 获取命名空间 例如kasmweb  这里有种特殊情况 docker.io/nginx，把docker.io当成命名空间，也OK
@@ -145,29 +145,17 @@ jobs:
                 
                 # 为每个平台拉取、标记并推送镜像
                 for platform in "${platform_array[@]}"; do
-                    # 解析架构信息
-                    arch=$(echo "$platform" | cut -d'/' -f2)
-                    variant=""
-                    if [[ "$platform" == *"/"*"/"* ]]; then
-                        variant=$(echo "$platform" | cut -d'/' -f3)
-                    fi
-                    
-                    # 生成唯一的标签后缀，而不是使用digest格式
-                    random_suffix=$(date +%s%N | sha256sum | head -c 8)
-                    platform_suffix="${arch}"
-                    if [[ -n "$variant" ]]; then
-                        platform_suffix="${platform_suffix}-${variant}"
-                    fi
-                    platform_tag="${target_image}-${platform_suffix}-${random_suffix}"
+                    platform_suffix="${platform//\//_}"
+                    platform_tag="$target_image-$platform_suffix"
                     platform_tags+=("$platform_tag")
                     
-                    echo "Processing platform: $platform with tag: $platform_tag"
+                    echo "Processing platform: $platform"
                     
                     # 拉取指定平台的镜像
                     echo "docker pull --platform=$platform $image"
                     docker pull --platform=$platform $image
                     
-                    # 标记镜像（使用特殊标签格式）
+                    # 标记镜像（带平台后缀）
                     echo "docker tag $image $platform_tag"
                     docker tag $image $platform_tag
                     
@@ -183,7 +171,7 @@ jobs:
                 docker manifest rm $target_image 2>/dev/null || true
                 
                 # 创建新的 manifest
-                manifest_cmd="docker manifest create --amend $target_image"
+                manifest_cmd="docker manifest create $target_image"
                 for tag in "${platform_tags[@]}"; do
                     manifest_cmd="$manifest_cmd $tag"
                 done
@@ -204,19 +192,23 @@ jobs:
                     
                     # 设置架构信息
                     if [[ -n "$variant" ]]; then
-                        echo "docker manifest annotate $target_image $platform_tag --os linux --arch $arch --variant $variant"
-                        docker manifest annotate $target_image $platform_tag --os linux --arch $arch --variant $variant
+                        echo "docker manifest annotate $target_image $platform_tag --arch $arch --variant $variant"
+                        docker manifest annotate $target_image $platform_tag --arch $arch --variant $variant
                     else
-                        echo "docker manifest annotate $target_image $platform_tag --os linux --arch $arch"
-                        docker manifest annotate $target_image $platform_tag --os linux --arch $arch
+                        echo "docker manifest annotate $target_image $platform_tag --arch $arch"
+                        docker manifest annotate $target_image $platform_tag --arch $arch
                     fi
                 done
                 
                 # 推送 manifest 清单
-                echo "docker manifest push --purge $target_image"
-                docker manifest push --purge $target_image
+                echo "docker manifest push $target_image"
+                docker manifest push $target_image
                 
-                echo "Multi-architecture image created and pushed successfully"
+                # 清理临时的平台特定镜像标签（可选）
+                # for tag in "${platform_tags[@]}"; do
+                #     echo "Cleaning up temporary tag: $tag"
+                #     docker manifest rm $tag 2>/dev/null || true
+                # done
             fi
             
             echo "Completed processing: $image"
