@@ -152,12 +152,16 @@ jobs:
                         variant=$(echo "$platform" | cut -d'/' -f3)
                     fi
                     
-                    # 构建符合Harbor多架构存储的标签
-                    # 使用 sha256 digest 作为引用，确保Harbor能正确关联
-                    platform_tag="$target_image@sha256:$(date +%s%N | sha256sum | head -c 64)"
+                    # 生成唯一的标签后缀，而不是使用digest格式
+                    random_suffix=$(date +%s%N | sha256sum | head -c 8)
+                    platform_suffix="${arch}"
+                    if [[ -n "$variant" ]]; then
+                        platform_suffix="${platform_suffix}-${variant}"
+                    fi
+                    platform_tag="${target_image}-${platform_suffix}-${random_suffix}"
                     platform_tags+=("$platform_tag")
                     
-                    echo "Processing platform: $platform"
+                    echo "Processing platform: $platform with tag: $platform_tag"
                     
                     # 拉取指定平台的镜像
                     echo "docker pull --platform=$platform $image"
