@@ -1,7 +1,12 @@
 # nodered/node-red:4.0.2-22
 # --platform=linux/arm64 openjdk:8u302-jdk11
---platform=linux/amd64,linux/arm64 openresty/openresty:1.25.3.2-5-jammy
---platform=linux/amd64,linux/arm64 flink:1.16.3-scala_2.12-java8
+--platform=linux/amd64,linux/arm64 flink:1.20.2-scala_2.12-java11
+--platform=linux/amd64,linux/arm64 mysql:8.4.5
+--platform=linux/amd64,linux/arm64 redis:8.0.3
+--platform=linux/amd64,linux/arm64 clickhouse:25.6.3.116
+--platform=linux/amd64,linux/arm64 mysql:8.4.5
+--platform=linux/amd64,linux/arm64 nacos/nacos-server:v2.5.1
+--platform=linux/amd64,linux/arm64 postgres:17
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
