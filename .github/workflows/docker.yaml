@@ -146,23 +146,10 @@ jobs:
                 # 为每个平台拉取、标记并推送镜像
                 for platform in "${platform_array[@]}"; do
                     platform_suffix="${platform//\//_}"
-                    
-                    # 从target_image中分离镜像名和标签
-                    # 例如：registry.eui.com.cn/tools/kafka:4.0.0
-                    # 分离为：registry.eui.com.cn/tools/kafka 和 4.0.0
-                    if [[ "$target_image" == *":"* ]]; then
-                        image_name_part="${target_image%:*}"
-                        image_tag_part="${target_image##*:}"
-                        platform_tag="$image_name_part/$platform_suffix:$image_tag_part"
-                    else
-                        # 如果没有标签，默认使用latest
-                        platform_tag="$target_image/$platform_suffix:latest"
-                    fi
-                    
+                    platform_tag="$target_image-$platform_suffix"
                     platform_tags+=("$platform_tag")
                     
                     echo "Processing platform: $platform"
-                    echo "Platform tag: $platform_tag"
                     
                     # 拉取指定平台的镜像
                     echo "docker pull --platform=$platform $image"
