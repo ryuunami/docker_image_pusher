@@ -75,20 +75,27 @@ jobs:
                 continue
             fi
         
-            echo "docker pull $line"
-            docker pull $line
-            platform=$(echo "$line" | awk -F'--platform[ =]' '{if (NF>1) print $2}' | awk '{print $1}')
-            echo "platform is $platform"
-            # 如果存在架构信息 将架构信息拼到镜像名称前面
-            if [ -z "$platform" ]; then
-                platform_prefix=""
-            else
-                platform_prefix="${platform//\//_}_"
+            echo "Processing line: $line"
+            
+            # 解析平台信息
+            platforms=""
+            if echo "$line" | grep -q '\--platform'; then
+                platforms=$(echo "$line" | sed -n 's/.*--platform[= ]\([^ ]*\).*/\1/p')
             fi
-            echo "platform_prefix is $platform_prefix"
+            
+            # 如果没有指定平台，默认使用 linux/amd64
+            if [[ -z "$platforms" ]]; then
+                platforms="linux/amd64"
+                echo "No platform specified, using default: $platforms"
+            else
+                echo "Found platforms: $platforms"
+            fi
+            
             # 获取镜像的完整名称，例如kasmweb/nginx:1.25.3（命名空间/镜像名:版本号）
             image=$(echo "$line" | awk '{print $NF}')
-
+            # 将@sha256:等字符删除
+            image="${image%%@*}"
+            
             # 获取 镜像名:版本号  例如nginx:1.25.3
             image_name_tag=$(echo "$image" | awk -F'/' '{print $NF}')
             # 获取命名空间 例如kasmweb  这里有种特殊情况 docker.io/nginx，把docker.io当成命名空间，也OK
@@ -105,11 +112,106 @@ jobs:
                fi
             fi
             
-            # 将@sha256:等字符删除
-            image_name_tag="${image_name_tag%%@*}"
-            new_image="$ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$platform_prefix$name_space_prefix$image_name_tag"
-            echo "docker tag $image $new_image"
-            docker tag $image $new_image
-            echo "docker push $new_image"
-            docker push $new_image
+            # 目标镜像名（不包含架构前缀）
+            target_image="$ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$name_space_prefix$image_name_tag"
+            echo "Target image: $target_image"
+            
+            # 分割平台列表
+            IFS=',' read -ra platform_array <<< "$platforms"
+            
+            # 如果只有一个平台，直接推送
+            if [[ ${#platform_array[@]} -eq 1 ]]; then
+                platform=${platform_array[0]}
+                echo "Single platform deployment: $platform"
+                
+                # 拉取指定平台的镜像
+                echo "docker pull --platform=$platform $image"
+                docker pull --platform=$platform $image
+                
+                # 标记镜像
+                echo "docker tag $image $target_image"
+                docker tag $image $target_image
+                
+                # 推送镜像
+                echo "docker push $target_image"
+                docker push $target_image
+                
+            else
+                # 多平台部署
+                echo "Multi-platform deployment: ${platform_array[*]}"
+                
+                # 存储每个平台的镜像标签
+                platform_tags=()
+                
+                # 为每个平台拉取、标记并推送镜像
+                for platform in "${platform_array[@]}"; do
+                    platform_suffix="${platform//\//_}"
+                    platform_tag="$target_image-$platform_suffix"
+                    platform_tags+=("$platform_tag")
+                    
+                    echo "Processing platform: $platform"
+                    
+                    # 拉取指定平台的镜像
+                    echo "docker pull --platform=$platform $image"
+                    docker pull --platform=$platform $image
+                    
+                    # 标记镜像（带平台后缀）
+                    echo "docker tag $image $platform_tag"
+                    docker tag $image $platform_tag
+                    
+                    # 推送镜像
+                    echo "docker push $platform_tag"
+                    docker push $platform_tag
+                done
+                
+                # 创建 manifest 清单
+                echo "Creating manifest for multi-platform image: $target_image"
+                
+                # 删除可能存在的旧 manifest
+                docker manifest rm $target_image 2>/dev/null || true
+                
+                # 创建新的 manifest
+                manifest_cmd="docker manifest create $target_image"
+                for tag in "${platform_tags[@]}"; do
+                    manifest_cmd="$manifest_cmd $tag"
+                done
+                echo "Executing: $manifest_cmd"
+                $manifest_cmd
+                
+                # 为每个平台设置正确的架构信息
+                for i in "${!platform_array[@]}"; do
+                    platform="${platform_array[$i]}"
+                    platform_tag="${platform_tags[$i]}"
+                    
+                    # 解析架构信息
+                    arch=$(echo "$platform" | cut -d'/' -f2)
+                    variant=""
+                    if [[ "$platform" == *"/"*"/"* ]]; then
+                        variant=$(echo "$platform" | cut -d'/' -f3)
+                    fi
+                    
+                    # 设置架构信息
+                    if [[ -n "$variant" ]]; then
+                        echo "docker manifest annotate $target_image $platform_tag --arch $arch --variant $variant"
+                        docker manifest annotate $target_image $platform_tag --arch $arch --variant $variant
+                    else
+                        echo "docker manifest annotate $target_image $platform_tag --arch $arch"
+                        docker manifest annotate $target_image $platform_tag --arch $arch
+                    fi
+                done
+                
+                # 推送 manifest 清单
+                echo "docker manifest push $target_image"
+                docker manifest push $target_image
+                
+                # 清理临时的平台特定镜像标签（可选）
+                # for tag in "${platform_tags[@]}"; do
+                #     echo "Cleaning up temporary tag: $tag"
+                #     docker manifest rm $tag 2>/dev/null || true
+                # done
+            fi
+            
+            echo "Completed processing: $image"
+            echo "----------------------------------------"
+            
         done < images.txt
