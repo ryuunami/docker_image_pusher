@@ -145,8 +145,16 @@ jobs:
                 
                 # 为每个平台拉取、标记并推送镜像
                 for platform in "${platform_array[@]}"; do
-                    platform_suffix="${platform//\//_}"
-                    platform_tag="$target_image-$platform_suffix"
+                    # 解析架构信息
+                    arch=$(echo "$platform" | cut -d'/' -f2)
+                    variant=""
+                    if [[ "$platform" == *"/"*"/"* ]]; then
+                        variant=$(echo "$platform" | cut -d'/' -f3)
+                    fi
+                    
+                    # 构建符合Harbor多架构存储的标签
+                    # 使用 sha256 digest 作为引用，确保Harbor能正确关联
+                    platform_tag="$target_image@sha256:$(date +%s%N | sha256sum | head -c 64)"
                     platform_tags+=("$platform_tag")
                     
                     echo "Processing platform: $platform"
@@ -155,7 +163,7 @@ jobs:
                     echo "docker pull --platform=$platform $image"
                     docker pull --platform=$platform $image
                     
-                    # 标记镜像（带平台后缀）
+                    # 标记镜像（使用特殊标签格式）
                     echo "docker tag $image $platform_tag"
                     docker tag $image $platform_tag
                     
@@ -171,7 +179,7 @@ jobs:
                 docker manifest rm $target_image 2>/dev/null || true
                 
                 # 创建新的 manifest
-                manifest_cmd="docker manifest create $target_image"
+                manifest_cmd="docker manifest create --amend $target_image"
                 for tag in "${platform_tags[@]}"; do
                     manifest_cmd="$manifest_cmd $tag"
                 done
@@ -192,23 +200,19 @@ jobs:
                     
                     # 设置架构信息
                     if [[ -n "$variant" ]]; then
-                        echo "docker manifest annotate $target_image $platform_tag --arch $arch --variant $variant"
-                        docker manifest annotate $target_image $platform_tag --arch $arch --variant $variant
+                        echo "docker manifest annotate $target_image $platform_tag --os linux --arch $arch --variant $variant"
+                        docker manifest annotate $target_image $platform_tag --os linux --arch $arch --variant $variant
                     else
-                        echo "docker manifest annotate $target_image $platform_tag --arch $arch"
-                        docker manifest annotate $target_image $platform_tag --arch $arch
+                        echo "docker manifest annotate $target_image $platform_tag --os linux --arch $arch"
+                        docker manifest annotate $target_image $platform_tag --os linux --arch $arch
                     fi
                 done
                 
                 # 推送 manifest 清单
-                echo "docker manifest push $target_image"
-                docker manifest push $target_image
+                echo "docker manifest push --purge $target_image"
+                docker manifest push --purge $target_image
                 
-                # 清理临时的平台特定镜像标签（可选）
-                # for tag in "${platform_tags[@]}"; do
-                #     echo "Cleaning up temporary tag: $tag"
-                #     docker manifest rm $tag 2>/dev/null || true
-                # done
+                echo "Multi-architecture image created and pushed successfully"
             fi
             
             echo "Completed processing: $image"
