@@ -1,6 +1,6 @@
 # nodered/node-red:4.0.2-22
 # --platform=linux/arm64 openjdk:8u302-jdk11
---platform=linux/amd64,linux/arm64 tomcat:7.0.109
+--platform=linux/amd64,linux/arm64 jenkins/jenkins:2.516.1
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
