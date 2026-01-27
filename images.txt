@@ -1,5 +1,11 @@
 # nodered/node-red:4.0.2-22
---platform=linux/arm64 langgenius/dify-api:1.7.2
+--platform=linux/arm64 langgenius/dify-web:1.7.2
+--platform=linux/arm64 postgres:15-alpine
+--platform=linux/arm64 redis:6-alpine
+--platform=linux/arm64 langgenius/dify-sandbox:0.2.12
+--platform=linux/arm64 langgenius/dify-plugin-daemon:0.2.0-local
+--platform=linux/arm64 ubuntu/squid:latest
+--platform=linux/arm64 semitechnologies/weaviate:1.19.0
 # --platform=linux/amd64,linux/arm64 rustdesk/rustdesk-server:1.1.15
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
