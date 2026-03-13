@@ -1,6 +1,6 @@
 # nodered/node-red:4.0.2-22
---platform=linux/amd64,linux/arm64 node:22-bookworm
-# --platform=linux/amd64 apache/dolphinscheduler-standalone-server:3.4.0
+# --platform=linux/amd64,linux/arm64 node:22-bookworm
+--platform=linux/amd64 agentscope/copaw:latest:3.4.0
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
