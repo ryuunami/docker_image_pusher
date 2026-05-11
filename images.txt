@@ -1,5 +1,6 @@
 # nodered/node-red:4.0.2-22
---platform=linux/amd64 openlistteam/openlist:beta
+--platform=linux/amd64 openlistteam/openlist:v4.2.0
+--platform=linux/amd64 openlistteam/openlist:v4.1.9
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
