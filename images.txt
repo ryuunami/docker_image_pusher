@@ -1,6 +1,6 @@
 # nodered/node-red:4.0.2-22
 # --platform=linux/amd64,linux/arm64 nginx:1.31
---platform=linux/amd64 litellm/litellm:1.87.0-dev.1
+--platform=linux/amd64 litellm/litellm:1.82.0
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
