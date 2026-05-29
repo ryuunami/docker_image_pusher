@@ -1,6 +1,6 @@
 # nodered/node-red:4.0.2-22
---platform=linux/amd64 bitnami/postgresql:15.2.0
---platform=linux/amd64 bitnami/zookeeper:3.7.1
+--platform=linux/amd64 postgres:15.2
+--platform=linux/amd64 zookeeper:3.7.1
 --platform=linux/amd64 apache/dolphinscheduler-tools:3.4.1
 --platform=linux/amd64 apache/dolphinscheduler-api:3.4.1
 --platform=linux/amd64 apache/dolphinscheduler-alert-server:3.4.1
