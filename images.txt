@@ -1,6 +1,6 @@
 # nodered/node-red:4.0.2-22
---platform=linux/amd64,linux/arm64 n8nio/n8n:2.29.5
-# --platform=linux/amd64 bitnami/postgresql:15.2.0
+--platform=linux/amd64 mzz2017/v2raya:v2.4.9
+# --platform=linux/amd64,linux/arm64 bitnami/postgresql:15.2.0
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
