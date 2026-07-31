@@ -1,6 +1,6 @@
 # nodered/node-red:4.0.2-22
---platform=linux/amd64 seakee/cpa-manager-plus:v1.11.9
---platform=linux/amd64 eceasy/cli-proxy-api:v7.2.103
+--platform=linux/amd64,linux/arm64 seakee/cpa-manager-plus:v1.11.9
+--platform=linux/amd64,linux/arm64 eceasy/cli-proxy-api:v7.2.103
 # --platform=linux/amd64,linux/arm64 bitnmi/postgresql:15.2.0
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
