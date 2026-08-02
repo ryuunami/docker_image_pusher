@@ -1,6 +1,5 @@
 # nodered/node-red:4.0.2-22
---platform=linux/amd64,linux/arm64 calciumion/new-api:v1.0.0-rc.22
---platform=linux/amd64,linux/arm64 postgres:15
+--platform=linux/amd64,linux/arm64 mzz2017/v2raya:v2.2.7.5
 # --platform=linux/amd64,linux/arm64 bitnmi/postgresql:15.2.0
 #支持私库1 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
