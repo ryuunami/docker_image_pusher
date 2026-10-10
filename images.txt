@@ -1,5 +1,5 @@
 # nodered/node-red:4.0.2-22
---platform=linux/amd64,linux/arm64 jenkins/jenkins:2.568.3
+--platform=linux/amd64,linux/arm64 apache/kafka:4.3.1
 # --platform=linux/amd64,linux/arm64 python:3.13
 # --platform=linux/amd64,linux/arm64 bitnmi/postgresql:15.2.0
 #支持私库1 --platform=linux/arm64
