@@ -2,7 +2,7 @@
 --platform=linux/amd64,linux/arm64 apache/kafka:4.3.1
 # --platform=linux/amd64,linux/arm64 python:3.13
 # --platform=linux/amd64,linux/arm64 bitnmi/postgresql:15.2.0
-#支持私库1 --platform=linux/arm64
+#支持私库 --platform=linux/arm64
 #k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
 #xhofe/alist:latest
 #支持指定架构
